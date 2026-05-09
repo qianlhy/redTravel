@@ -1,0 +1,111 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "红色旅游",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/route/detail",
+      "style": {
+        "navigationBarTitleText": "路线详情",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/booking/form",
+      "style": {
+        "navigationBarTitleText": "团队预约",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/booking/order",
+      "style": {
+        "navigationBarTitleText": "我的预约",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/attraction/detail",
+      "style": {
+        "navigationBarTitleText": "景点详情",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/order/detail",
+      "style": {
+        "navigationBarTitleText": "预约详情",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/attraction/list",
+      "style": {
+        "navigationBarTitleText": "红色景点",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/route/list",
+      "style": {
+        "navigationBarTitleText": "精品路线",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "红色旅游",
+    "navigationBarBackgroundColor": "#C41E3A",
+    "backgroundColor": "#F5F5F5",
+    "backgroundColorTop": "#F5F5F5",
+    "backgroundColorBottom": "#F5F5F5",
+    "app-plus": {
+      "titleNView": {
+        "buttons": []
+      }
+    }
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#C41E3A",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "static/tab-home.png",
+        "selectedIconPath": "static/tab-home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/booking/order",
+        "iconPath": "static/tab-order.png",
+        "selectedIconPath": "static/tab-order-active.png",
+        "text": "我的预约"
+      }
+    ]
+  },
+  "condition": {
+    "current": 0,
+    "list": [
+      {
+        "name": "路线详情",
+        "path": "pages/route/detail",
+        "query": "id=1"
+      }
+    ]
+  }
+}
