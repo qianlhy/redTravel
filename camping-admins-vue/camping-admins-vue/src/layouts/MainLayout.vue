@@ -28,6 +28,10 @@
           <el-icon><DataLine /></el-icon>
           <template #title>数据看板</template>
         </el-menu-item>
+        <el-menu-item index="/content-module">
+          <el-icon><Collection /></el-icon>
+          <template #title>内容模块管理</template>
+        </el-menu-item>
         <el-menu-item index="/red-attraction">
           <el-icon><OfficeBuilding /></el-icon>
           <template #title>红色景点管理</template>
@@ -83,7 +87,7 @@
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAdminUserStore } from '@/store/adminUser';
-import { Fold, Expand, DataLine, OfficeBuilding, Guide, Calendar } from '@element-plus/icons-vue';
+import { Fold, Expand, DataLine, OfficeBuilding, Guide, Calendar, Collection } from '@element-plus/icons-vue';
 
 const route = useRoute();
 const router = useRouter();

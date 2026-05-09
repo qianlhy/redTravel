@@ -177,7 +177,16 @@ const groupedAttractions = computed(() => {
   return Object.values(map).sort((a, b) => a.dayIndex - b.dayIndex);
 });
 
-const goBack = () => uni.navigateBack();
+const goBack = () => {
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack({ fail: () => {
+      uni.reLaunch({ url: '/pages/index/index' });
+    }});
+  } else {
+    uni.reLaunch({ url: '/pages/index/index' });
+  }
+};
 const goBooking = () => {
   const pages = getCurrentPages();
   const currentPage = pages[pages.length - 1];

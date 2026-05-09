@@ -18,6 +18,10 @@ public class AdminUserDetailsService implements UserDetailsService {
     @Autowired
     private AdminUserMapper adminUserMapper;
 
+    public AdminUser getAdminUserById(Long id) {
+        return adminUserMapper.selectById(id);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AdminUser adminUser = adminUserMapper.selectByUsername(username);

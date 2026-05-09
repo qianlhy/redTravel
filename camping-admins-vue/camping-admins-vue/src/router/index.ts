@@ -18,6 +18,7 @@ const routes: RouteRecordRaw[] = [
     redirect: '/dashboard',
     children: [
       { path: 'dashboard', name: 'Dashboard', component: () => import('@/views/dashboard/index.vue'), meta: { title: '数据看板', requiresAuth: true } as RouteMeta },
+      { path: 'content-module', name: 'ContentModule', component: () => import('@/views/content-module/index.vue'), meta: { title: '内容模块管理', requiresAuth: true } as RouteMeta },
       { path: 'red-attraction', name: 'RedAttraction', component: () => import('@/views/red-attraction/index.vue'), meta: { title: '红色景点管理', requiresAuth: true } as RouteMeta },
       { path: 'travel-route', name: 'TravelRoute', component: () => import('@/views/travel-route/index.vue'), meta: { title: '旅游路线管理', requiresAuth: true } as RouteMeta },
       { path: 'team-booking', name: 'TeamBooking', component: () => import('@/views/team-booking/index.vue'), meta: { title: '团队预约管理', requiresAuth: true } as RouteMeta },

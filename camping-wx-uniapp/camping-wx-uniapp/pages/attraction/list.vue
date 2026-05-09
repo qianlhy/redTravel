@@ -118,7 +118,16 @@ const goDetail = (id) => {
   uni.navigateTo({ url: `/pages/attraction/detail?id=${id}` });
 };
 
-const goBack = () => uni.navigateBack();
+const goBack = () => {
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack({ fail: () => {
+      uni.reLaunch({ url: '/pages/index/index' });
+    }});
+  } else {
+    uni.reLaunch({ url: '/pages/index/index' });
+  }
+};
 
 // 触底加载更多（通过 onReachBottom 在 pages.json 配置）
 // eslint-disable-next-line no-unused-vars

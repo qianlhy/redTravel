@@ -209,9 +209,11 @@ const confirmDate = () => {
 const goBack = () => {
   const pages = getCurrentPages();
   if (pages.length > 1) {
-    uni.redirectTo({ url: '/pages/booking/order' });
+    uni.navigateBack({ fail: () => {
+      uni.reLaunch({ url: '/pages/index/index' });
+    }});
   } else {
-    uni.switchTab({ url: '/pages/index/index' });
+    uni.reLaunch({ url: '/pages/index/index' });
   }
 };
 

@@ -9,6 +9,22 @@
       }
     },
     {
+      "path": "pages/content/list",
+      "style": {
+        "navigationBarTitleText": "内容列表",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/content/detail",
+      "style": {
+        "navigationBarTitleText": "详情",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
       "path": "pages/route/detail",
       "style": {
         "navigationBarTitleText": "路线详情",
@@ -89,22 +105,22 @@
         "iconPath": "static/tab-home.png",
         "selectedIconPath": "static/tab-home-active.png",
         "text": "首页"
-      },
-      {
+      }
+      <!-- {
         "pagePath": "pages/booking/order",
         "iconPath": "static/tab-order.png",
         "selectedIconPath": "static/tab-order-active.png",
         "text": "我的预约"
-      }
+      } -->
     ]
   },
   "condition": {
     "current": 0,
     "list": [
       {
-        "name": "路线详情",
-        "path": "pages/route/detail",
-        "query": "id=1"
+        "name": "内容列表",
+        "path": "pages/content/list",
+        "query": "category=zkaju"
       }
     ]
   }

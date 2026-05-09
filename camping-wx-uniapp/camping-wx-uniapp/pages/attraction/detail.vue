@@ -117,7 +117,16 @@ const loadDetail = async () => {
   } catch (e) { /* ignore */ }
 };
 
-const goBack = () => uni.navigateBack();
+const goBack = () => {
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack({ fail: () => {
+      uni.reLaunch({ url: '/pages/index/index' });
+    }});
+  } else {
+    uni.reLaunch({ url: '/pages/index/index' });
+  }
+};
 const goRoute = (id) => uni.navigateTo({ url: `/pages/route/detail?id=${id}` });
 </script>
 

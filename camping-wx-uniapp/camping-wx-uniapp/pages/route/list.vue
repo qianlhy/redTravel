@@ -145,7 +145,16 @@ const goDetail = (id) => {
   uni.navigateTo({ url: `/pages/route/detail?id=${id}` });
 };
 
-const goBack = () => uni.navigateBack();
+const goBack = () => {
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack({ fail: () => {
+      uni.reLaunch({ url: '/pages/index/index' });
+    }});
+  } else {
+    uni.reLaunch({ url: '/pages/index/index' });
+  }
+};
 </script>
 
 <style scoped>

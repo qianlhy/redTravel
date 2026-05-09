@@ -165,10 +165,13 @@ const cancelOrder = () => {
 };
 
 const goBack = () => {
-  if (_backUrl) {
-    uni.redirectTo({ url: _backUrl });
+  const pages = getCurrentPages();
+  if (pages.length > 1) {
+    uni.navigateBack({ fail: () => {
+      uni.reLaunch({ url: '/pages/index/index' });
+    }});
   } else {
-    uni.switchTab({ url: '/pages/booking/order' });
+    uni.reLaunch({ url: '/pages/index/index' });
   }
 };
 </script>

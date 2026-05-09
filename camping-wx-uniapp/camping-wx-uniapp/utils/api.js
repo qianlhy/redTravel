@@ -44,26 +44,28 @@ export const h5Api = {
   getBannerList: () => request('/api/h5/banner/list'),
 
   // ===== 景点 =====
-  /** 推荐景点列表 */
   getRecommendAttractions: () => request('/api/h5/attraction/recommend'),
-  /** 景点列表（支持搜索） */
   getAttractionList: (params) => request('/api/h5/attraction/list', { data: params }),
-  /** 景点详情 */
   getAttractionDetail: (id) => request(`/api/h5/attraction/detail/${id}`),
 
   // ===== 路线 =====
-  /** 推荐路线列表 */
   getRecommendRoutes: () => request('/api/h5/route/recommend'),
-  /** 路线列表（支持筛选） */
   getRouteList: (params) => request('/api/h5/route/list', { data: params }),
-  /** 路线详情 */
   getRouteDetail: (id) => request(`/api/h5/route/detail/${id}`),
 
   // ===== 预约 =====
-  /** 提交团队预约 */
   submitBooking: (data) => request('/api/h5/booking/submit', { method: 'POST', data }),
-  /** 按手机号查询预约 */
   queryBooking: (phone) => request('/api/h5/booking/query', { data: { phone } }),
-  /** 按ID查询预约详情 */
   queryBookingById: (id) => request('/api/h5/booking/query', { data: { id } }),
+
+  // ===== 内容模块（6个分类） =====
+  /** 获取六个分类配置 */
+  getContentCategories: () => request('/api/h5/content/categories'),
+  /** 按分类获取内容列表（首页展示用） */
+  getContentByCategory: (category, limit) =>
+    request(`/api/h5/content/list/${category}`, { data: limit ? { limit } : {} }),
+  /** 分页内容列表（列表页用） */
+  getContentPage: (params) => request('/api/h5/content/page', { data: params }),
+  /** 内容详情 */
+  getContentDetail: (id) => request(`/api/h5/content/detail/${id}`),
 };

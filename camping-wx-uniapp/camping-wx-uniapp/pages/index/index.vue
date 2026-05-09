@@ -35,7 +35,7 @@
 
     <!-- 快速入口 -->
     <view class="quick-entry">
-      <view class="entry-item" @click="goToAttractionList">
+      <!-- <view class="entry-item" @click="goToAttractionList">
         <view class="entry-icon">🏛</view>
         <view class="entry-text">红色景点</view>
         <view class="entry-desc">铭记历史</view>
@@ -44,21 +44,88 @@
         <view class="entry-icon">🗺</view>
         <view class="entry-text">精品路线</view>
         <view class="entry-desc">传承精神</view>
-      </view>
+      </view> -->
       <view class="entry-item" @click="goToBookingForm(null)">
         <view class="entry-icon">📋</view>
         <view class="entry-text">团队预约</view>
         <view class="entry-desc">便捷出行</view>
       </view>
-      <view class="entry-item" @click="goToMyOrders">
+      <!-- <view class="entry-item" @click="goToMyOrders">
         <view class="entry-icon">📜</view>
         <view class="entry-text">我的预约</view>
         <view class="entry-desc">订单管理</view>
+      </view> -->
+    </view>
+
+    <!-- 内容分类模块 — 六个Tab -->
+    <view class="module-wrap">
+      <view class="module-header">
+        <view class="module-title-row">
+          <view class="title-icon">📌</view>
+          <text class="module-title">内容中心</text>
+        </view>
+      </view>
+
+      <!-- Tab标签 -->
+      <scroll-view class="tab-scroll" scroll-x enable-flex>
+        <view class="tab-list">
+          <view
+            class="tab-item"
+            :class="{ active: activeTab === tab.code }"
+            v-for="tab in contentTabs"
+            :key="tab.code"
+            @click="switchTab(tab.code)"
+          >
+            <view class="tab-icon">{{ tab.icon }}</view>
+            <text class="tab-name">{{ tab.name }}</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- 内容列表（左右布局） -->
+      <view class="content-list">
+        <view
+          class="content-item"
+          v-for="item in contentList"
+          :key="item.id"
+          @click="goContentDetail(item.id)"
+        >
+          <image
+            :src="item.coverImage || 'https://picsum.photos/300/200?random=default'"
+            mode="aspectFill"
+            class="item-cover"
+          ></image>
+          <view class="item-body">
+            <view class="item-meta">
+              <text class="item-tag">{{ item.categoryName }}</text>
+              <text class="item-date" v-if="item.publishDate">{{ item.publishDate }}</text>
+            </view>
+            <text class="item-title">{{ item.title }}</text>
+            <text class="item-sub" v-if="item.subtitle">{{ item.subtitle }}</text>
+            <view class="item-footer">
+              <text class="item-author" v-if="item.author">{{ item.author }}</text>
+              <text class="item-views">👁 {{ item.viewCount || 0 }}</text>
+            </view>
+          </view>
+          <text class="item-arrow">›</text>
+        </view>
+
+        <view class="empty-content" v-if="contentList.length === 0 && !contentLoading">
+          <text>该分类暂无内容</text>
+        </view>
+      </view>
+
+      <!-- 查看更多 -->
+      <view class="more-btn-row" v-if="contentList.length > 0">
+        <view class="more-btn" @click="goContentList">
+          <text>查看更多内容</text>
+          <text class="more-arrow">›</text>
+        </view>
       </view>
     </view>
 
     <!-- 红色景点推荐 -->
-    <view class="module-wrap" v-if="attractionList.length > 0">
+    <!-- <view class="module-wrap" v-if="attractionList.length > 0">
       <view class="module-header">
         <view class="module-title-row">
           <view class="title-icon">🏛</view>
@@ -84,10 +151,10 @@
           </view>
         </view>
       </scroll-view>
-    </view>
+    </view> -->
 
     <!-- 精品路线推荐 -->
-    <view class="module-wrap" v-if="routeList.length > 0">
+    <!-- <view class="module-wrap" v-if="routeList.length > 0">
       <view class="module-header">
         <view class="module-title-row">
           <view class="title-icon">🗺</view>
@@ -119,14 +186,14 @@
           </view>
         </view>
       </view>
-    </view>
+    </view> -->
 
     <!-- 空状态 -->
-    <view class="empty-state" v-if="attractionList.length === 0 && routeList.length === 0 && !loading">
+    <!-- <view class="empty-state" v-if="attractionList.length === 0 && routeList.length === 0 && !loading">
       <view class="empty-icon">🏛</view>
       <view class="empty-text">暂无数据</view>
       <view class="empty-sub">请检查后端服务是否启动</view>
-    </view>
+    </view> -->
 
     <!-- 底部安全区 -->
     <view style="height: 120rpx"></view>
@@ -144,6 +211,19 @@ const routeList = ref([]);
 const keyword = ref('');
 const loading = ref(false);
 
+// ===== 内容模块 =====
+const contentTabs = [
+  { code: 'zkaju', name: '走看聚', icon: '🏛' },
+  { code: 'qflz', name: '清风廉政', icon: '⚖' },
+  { code: 'yffl', name: '与法同行', icon: '📜' },
+  { code: 'szxc', name: '数字乡村', icon: '📱' },
+  { code: 'yxyp', name: '一县一片', icon: '🗺' },
+  { code: 'swxl', name: '室外线路', icon: '🧭' },
+];
+const activeTab = ref('zkaju');
+const contentList = ref([]);
+const contentLoading = ref(false);
+
 onMounted(() => {
   const sys = uni.getSystemInfoSync();
   statusBarHeight.value = sys.statusBarHeight || 20;
@@ -157,6 +237,7 @@ const loadData = async () => {
     loadBanners(),
     loadAttractions(),
     loadRoutes(),
+    loadContentList(),
   ]);
   loading.value = false;
 };
@@ -167,7 +248,6 @@ const loadBanners = async () => {
     const res = await h5Api.getBannerList();
     bannerList.value = res.data || [];
   } catch (e) {
-    // 降级：使用默认轮播图
     bannerList.value = [
       { id: 1, title: '传承红色基因', image: 'https://picsum.photos/750/400?random=1' },
       { id: 2, title: '庆祝建党百年', image: 'https://picsum.photos/750/400?random=2' },
@@ -194,6 +274,35 @@ const loadRoutes = async () => {
   } catch (e) {
     routeList.value = [];
   }
+};
+
+// 加载内容模块列表
+const loadContentList = async () => {
+  contentLoading.value = true;
+  try {
+    const res = await h5Api.getContentByCategory(activeTab.value, 6);
+    contentList.value = res.data || [];
+  } catch (e) {
+    contentList.value = [];
+  } finally {
+    contentLoading.value = false;
+  }
+};
+
+// 切换内容Tab
+const switchTab = (code) => {
+  activeTab.value = code;
+  loadContentList();
+};
+
+// 跳转内容列表页（更多）
+const goContentList = () => {
+  uni.navigateTo({ url: `/pages/content/list?category=${activeTab.value}` });
+};
+
+// 跳转内容详情页
+const goContentDetail = (id) => {
+  uni.navigateTo({ url: `/pages/content/detail?id=${id}` });
 };
 
 // 搜索
@@ -236,7 +345,8 @@ const goToRouteDetail = (id) => {
 
 // 跳转预约表单
 const goToBookingForm = (routeId) => {
-  uni.navigateTo({ url: `/pages/booking/form${routeId ? '?routeId=' + routeId : ''}` });
+  const query = routeId ? '?routeId=' + routeId : '';
+  uni.navigateTo({ url: '/pages/booking/form' + query });
 };
 
 // 跳转我的预约
@@ -386,6 +496,162 @@ const goToMyOrders = () => {
   color: #bbb;
 }
 
+/* 内容模块 Tab */
+.tab-scroll {
+  white-space: nowrap;
+  margin-bottom: 16rpx;
+}
+.tab-list {
+  display: inline-flex;
+  gap: 16rpx;
+  padding: 4rpx 0;
+}
+.tab-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 24rpx;
+  border-radius: 16rpx;
+  background: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  min-width: 120rpx;
+}
+.tab-item.active {
+  background: linear-gradient(135deg, #C41E3A, #8B0000);
+  box-shadow: 0 4rpx 16rpx rgba(196,30,58,0.3);
+}
+.tab-icon {
+  font-size: 40rpx;
+  margin-bottom: 8rpx;
+}
+.tab-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #333;
+}
+.tab-item.active .tab-name {
+  color: #fff;
+}
+
+/* 内容列表（左右布局） */
+.content-list {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.06);
+}
+.content-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+.content-item:last-child {
+  border-bottom: none;
+}
+.item-cover {
+  width: 220rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+}
+.item-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160rpx;
+}
+.item-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+.item-tag {
+  font-size: 20rpx;
+  background: #FFEBEE;
+  color: #B71C1C;
+  padding: 3rpx 12rpx;
+  border-radius: 16rpx;
+  font-weight: 600;
+}
+.item-date {
+  font-size: 20rpx;
+  color: #999;
+}
+.item-title {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 6rpx;
+}
+.item-sub {
+  display: block;
+  font-size: 22rpx;
+  color: #888;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 8rpx;
+}
+.item-footer {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.item-author {
+  font-size: 20rpx;
+  color: #999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120rpx;
+}
+.item-views {
+  font-size: 20rpx;
+  color: #bbb;
+}
+.item-arrow {
+  font-size: 40rpx;
+  color: #ccc;
+  flex-shrink: 0;
+  padding-left: 12rpx;
+}
+.empty-content {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #999;
+  font-size: 26rpx;
+}
+.more-btn-row {
+  margin-top: 16rpx;
+}
+.more-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  background: #fff;
+  border-radius: 40rpx;
+  padding: 20rpx;
+  font-size: 26rpx;
+  color: #B71C1C;
+  font-weight: 600;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.06);
+}
+.more-arrow { font-size: 32rpx; }
+
 /* 模块通用样式 */
 .module-wrap {
   margin: 0 24rpx 24rpx;
@@ -412,7 +678,7 @@ const goToMyOrders = () => {
 .title-tag {
   font-size: 20rpx;
   background: #FFF0F0;
-  color: #C41E3A;
+  color: #B71C1C;
   padding: 4rpx 12rpx;
   border-radius: 20rpx;
   font-weight: 500;
@@ -475,12 +741,12 @@ const goToMyOrders = () => {
 }
 .price-symbol {
   font-size: 22rpx;
-  color: #C41E3A;
+  color: #B71C1C;
 }
 .price-num {
   font-size: 30rpx;
   font-weight: 700;
-  color: #C41E3A;
+  color: #B71C1C;
 }
 .price-unit {
   font-size: 22rpx;
@@ -517,7 +783,7 @@ const goToMyOrders = () => {
   display: inline-block;
   font-size: 20rpx;
   background: #FFF0F0;
-  color: #C41E3A;
+  color: #B71C1C;
   padding: 2rpx 12rpx;
   border-radius: 20rpx;
   margin-bottom: 8rpx;
