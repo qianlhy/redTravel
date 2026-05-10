@@ -100,7 +100,7 @@
             <span style="color:#E6A23C">{{ currentRow.statusRemark }}</span>
           </el-descriptions-item>
           <el-descriptions-item v-if="currentRow.route" label="预约路线" :span="2">
-            {{ currentRow.route.name }}
+            {{ ((currentRow?.route as { name?: string })?.name) ?? '-' }}
           </el-descriptions-item>
         </el-descriptions>
       </div>
@@ -131,12 +131,13 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import { ElMessage, ElMessageBox, FormInstance } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import type { FormInstance } from 'element-plus';
 import request from '@/utils/request';
 import type { AxiosRequestConfig } from 'axios';
 
 const keyword = ref('');
-const statusFilter = ref('');
+const statusFilter = ref<number | ''>('');
 const pageNum = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
@@ -166,8 +167,8 @@ const loadData = async (page = 1) => {
       url: '/admin/team-booking/list', method: 'get',
       params: { keyword: keyword.value, status: statusFilter.value, pageNum: pageNum.value, pageSize: pageSize.value },
     } as AxiosRequestConfig);
-    tableData.value = res.data?.list || res.data || [];
-    total.value = (res.data as Record<string, number>)?.total || tableData.value.length;
+    tableData.value = res?.list || res || [];
+    total.value = (res as unknown as { total: number })?.total || tableData.value.length;
   } catch { /* ignore */ }
   finally { loading.value = false; }
 };
@@ -175,19 +176,17 @@ const loadData = async (page = 1) => {
 const loadSummary = async () => {
   try {
     const res = await request<Record<string, number>>({ url: '/admin/dashboard/stats', method: 'get' } as AxiosRequestConfig);
-    const d = res.data;
-    if (d) {
-      statusSummary.value[0].count = d.pendingBookings || 0;
-      statusSummary.value[1].count = d.confirmedBookings || 0;
-      statusSummary.value[2].count = d.rejectedBookings || 0;
-      statusSummary.value[3].count = d.completedBookings || 0;
-      statusSummary.value[4].count = d.cancelledBookings || 0;
-    }
+    const d = res;
+    statusSummary.value[0]!.count = d.pendingBookings || 0;
+    statusSummary.value[1]!.count = d.confirmedBookings || 0;
+    statusSummary.value[2]!.count = d.rejectedBookings || 0;
+    statusSummary.value[3]!.count = d.completedBookings || 0;
+    statusSummary.value[4]!.count = d.cancelledBookings || 0;
   } catch { /* ignore */ }
 };
 
 const toggleStatus = (val: number) => {
-  statusFilter.value = statusFilter.value === val ? '' : String(val);
+  statusFilter.value = statusFilter.value === val ? '' : val;
   loadData();
 };
 

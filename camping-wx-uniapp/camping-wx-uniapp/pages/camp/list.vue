@@ -60,7 +60,7 @@ import { onLoad, onPullDownRefresh, onReachBottom } from '@dcloudio/uni-app';
 import campItem from '@/components/camp-item.vue';
 
 // 后端接口基础地址
-const baseUrl = 'http://localhost:8080/api';
+const baseUrl = 'http://kko.wfeezor.cn/api';
 
 // 定义响应式数据
 let campList = []; // 原始营位列表

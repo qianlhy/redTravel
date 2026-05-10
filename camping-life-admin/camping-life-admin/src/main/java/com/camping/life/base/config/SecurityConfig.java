@@ -113,7 +113,7 @@ public class SecurityConfig {
                 // 权限规则
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/admin/login", "/api/admin/logout").permitAll()
+                        .requestMatchers("/api/admin/login", "/api/admin/logout", "/api/admin/info").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/login", "/static/**", "/templates/**", "/error").permitAll()

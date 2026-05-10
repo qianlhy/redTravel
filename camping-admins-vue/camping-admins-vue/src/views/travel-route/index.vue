@@ -186,7 +186,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import { ElMessage, ElMessageBox, FormInstance, FormRules } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import type { FormInstance, FormRules } from 'element-plus';
 import request from '@/utils/request';
 import type { AxiosRequestConfig } from 'axios';
 
@@ -229,8 +230,8 @@ const loadData = async (page = 1) => {
       url: '/admin/travel-route/list', method: 'get',
       params: { keyword: keyword.value, theme: themeFilter.value, pageNum: pageNum.value, pageSize: pageSize.value },
     } as AxiosRequestConfig);
-    tableData.value = res.data?.list || res.data || [];
-    total.value = (res.data as Record<string, number>)?.total || tableData.value.length;
+    tableData.value = res?.list || res || [];
+    total.value = (res as unknown as { total: number })?.total || tableData.value.length;
   } catch { /* ignore */ }
   finally { loading.value = false; }
 };

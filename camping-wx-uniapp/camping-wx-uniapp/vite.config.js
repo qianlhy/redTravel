@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // 将 /api 开头的请求代理到后端服务器
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'http://kko.wfeezor.cn',
         changeOrigin: true,
       },
     },

@@ -1,22 +1,24 @@
 // src/utils/request.ts
-import axios from 'axios';
-import { ElMessage } from 'element-plus';
 import { useAdminUserStore } from '@/store/adminUser';
+import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
+import { ElMessage } from 'element-plus';
 
 const service = axios.create({
-  baseURL: (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8080',
+  baseURL: (import.meta.env.VITE_API_BASE_URL as string) || 'https://kko.wfeezor.cn',
   timeout: 15000,
   headers: { 'Content-Type': 'application/json;charset=utf-8' },
 });
 
 service.interceptors.request.use((config) => {
-  const adminUserStore = useAdminUserStore();
-  if (adminUserStore.token) {
-    config.headers = config.headers || {};
-    config.headers['X-Admin-Id'] = String(adminUserStore.userId);
-  }
-  return config;
-}, (error) => Promise.reject(error));
+    const adminUserStore = useAdminUserStore();
+    if (adminUserStore.token) {
+      config.headers = config.headers || {};
+      config.headers['X-Admin-Id'] = String(adminUserStore.userId);
+      config.headers['Authorization'] = 'Bearer ' + adminUserStore.token;  // 添加这行
+    }
+    return config;
+  }, (error) => Promise.reject(error));
 
 service.interceptors.response.use(
   (response) => {
@@ -26,7 +28,7 @@ service.interceptors.response.use(
       // 各页面 catch 块自行处理提示
       return Promise.reject(new Error(res.msg));
     }
-    return res;
+    return res.data;  // ← 修改这里
   },
   (error) => {
     const adminUserStore = useAdminUserStore();
@@ -45,7 +47,7 @@ service.interceptors.response.use(
   }
 );
 
-const request = <T = unknown>(config: axios.AxiosRequestConfig): Promise<T> => {
+const request = <T = unknown>(config: AxiosRequestConfig): Promise<T> => {
   return service(config) as Promise<T>;
 };
 

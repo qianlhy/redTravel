@@ -48,7 +48,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 
 // 后端接口地址
-const baseUrl = 'http://localhost:8080/api';
+const baseUrl = 'http://kko.wfeezor.cn/api';
 
 // 响应式数据
 const areaId = ref(''); // 当前区域ID（从路由参数获取）

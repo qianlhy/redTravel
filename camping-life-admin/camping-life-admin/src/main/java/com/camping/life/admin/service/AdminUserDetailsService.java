@@ -28,8 +28,8 @@ public class AdminUserDetailsService implements UserDetailsService {
         if (adminUser == null) {
             throw new UsernameNotFoundException("管理员账号不存在或已禁用");
         }
-        String roleStr = adminUser.getRole();
-        String role = "ADMIN".equalsIgnoreCase(roleStr) ? "ADMIN" : "OPERATOR";
+        String rawRole = adminUser.getRole();
+        String role = (rawRole != null && "ADMIN".equalsIgnoreCase(rawRole.trim())) ? "ADMIN" : "OPERATOR";
         return new User(
             adminUser.getUsername(),
             adminUser.getPassword(),

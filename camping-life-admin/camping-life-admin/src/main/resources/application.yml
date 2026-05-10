@@ -2,20 +2,35 @@
 spring:
   application:
     name: red-tourism-admin
-  profiles:
-    active: dev
-  # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/red_tourism?useUnicode=true&characterEncoding=utf8mb4&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
-    username: root
-    password: root
-  # Jackson 配置
+    url: jdbc:mysql://82.156.217.197:3306/red_tourism?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: red_tourism
+    password: KWx2Y64shTXXBB44
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      pool-name: CampingHikariPool
+      connection-test-query: SELECT 1
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
     serialization:
       write-dates-as-timestamps: false
+
+# JPA/Hibernate 配置
+spring.jpa:
+  hibernate:
+    ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+      format_sql: true
 
 # 服务器配置
 server:
@@ -40,7 +55,6 @@ mybatis-plus:
       logic-not-delete-value: 0
       table-prefix: ""
   mapper-locations: classpath*:mapper/**/*.xml
-  # 扫描枚举类
   type-enums-package: com.camping.life.**.enums
 
 # 日志级别

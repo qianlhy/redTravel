@@ -39,7 +39,8 @@
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAdminUserStore } from '@/store/adminUser';
-import { ElMessage, FormInstance, FormRules } from 'element-plus';
+import { ElMessage } from 'element-plus';
+import type { FormInstance, FormRules } from 'element-plus';
 
 const router = useRouter();
 const adminUserStore = useAdminUserStore();
@@ -62,7 +63,12 @@ const handleLogin = async () => {
     await adminUserStore.login(form);
     router.push('/dashboard');
   } catch (err: unknown) {
-    ElMessage.error((err as Error)?.message || '登录失败，请检查账号密码');
+    const error = err as { response?: { status?: number }; message?: string } | Error;
+    if (error?.response?.status === 401) {
+      ElMessage.error('登录过期，请重新登录');
+    } else {
+      ElMessage.error((error as Error)?.message || '登录失败，请检查账号密码');
+    }
   }
   finally { loading.value = false; }
 };

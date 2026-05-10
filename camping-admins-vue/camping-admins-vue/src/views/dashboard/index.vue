@@ -103,13 +103,13 @@ const initTrendChart = () => {
 const loadStats = async () => {
   try {
     const res = await request<Record<string, number>>({ url: '/admin/dashboard/stats', method: 'get' } as AxiosRequestConfig);
-    const d = res.data;
-    statCards[0].value = d.todayBookings ?? 0;
-    statCards[1].value = d.pendingBookings ?? 0;
-    statCards[2].value = d.confirmedBookings ?? 0;
-    statCards[3].value = d.totalBookings ?? 0;
-    statCards[4].value = d.activeRoutes ?? 0;
-    statCards[5].value = d.completedBookings ?? 0;
+    const d = res;
+    statCards[0]!.value = d.todayBookings ?? 0;
+    statCards[1]!.value = d.pendingBookings ?? 0;
+    statCards[2]!.value = d.confirmedBookings ?? 0;
+    statCards[3]!.value = d.totalBookings ?? 0;
+    statCards[4]!.value = d.activeRoutes ?? 0;
+    statCards[5]!.value = d.completedBookings ?? 0;
   } catch { /* ignore */ }
 };
 
@@ -121,7 +121,7 @@ const loadTrend = async () => {
       method: 'get',
       params: { days: trendDays.value },
     } as AxiosRequestConfig);
-    const data = res.data || [];
+    const data = res || [];
     trendChart.setOption({
       xAxis: { data: data.map((d: { date: string }) => d.date) },
       series: [{ data: data.map((d: { count: number }) => d.count) }],

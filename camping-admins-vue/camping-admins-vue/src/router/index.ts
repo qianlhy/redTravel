@@ -1,5 +1,5 @@
 // src/router/index.ts
-import type { RouteMeta } from '@/types/router';
+import type { RouteMeta } from 'vue-router';
 import { useAdminUserStore } from '@/store/adminUser';
 import { ElMessage } from 'element-plus';
 import { createRouter, createWebHashHistory } from 'vue-router';

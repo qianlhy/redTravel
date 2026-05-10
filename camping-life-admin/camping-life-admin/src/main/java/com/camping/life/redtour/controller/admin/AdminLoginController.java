@@ -38,11 +38,27 @@ public class AdminLoginController {
     }
 
     @PostMapping("/info")
-    public Result<Map<String, Object>> info(@RequestHeader(value = "X-Admin-Id", required = false) Long adminId) {
-        if (adminId == null) {
+    public Result<Map<String, Object>> info(
+            @RequestHeader(value = "X-Admin-Id", required = false) Long adminId,
+            @RequestHeader(value = "Authorization", required = false) String authorization) {
+        
+        // 优先从 X-Admin-Id 获取，如果没有则从 Authorization 解析
+        Long userId = adminId;
+        if (userId == null && authorization != null && authorization.startsWith("Bearer ")) {
+            String token = authorization.substring(7);
+            // 从 token 解析 userId，格式: username_token_userId
+            try {
+                String[] parts = token.split("_");
+                if (parts.length >= 3) {
+                    userId = Long.parseLong(parts[parts.length - 1]);
+                }
+            } catch (Exception ignored) {}
+        }
+        
+        if (userId == null) {
             return Result.error(401, "请先登录");
         }
-        AdminUser user = adminUserService.getInfoById(adminId);
+        AdminUser user = adminUserService.getInfoById(userId);
         if (user == null) {
             return Result.error(404, "用户不存在");
         }

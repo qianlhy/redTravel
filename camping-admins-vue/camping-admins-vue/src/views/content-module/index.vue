@@ -168,7 +168,8 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue';
-import { ElMessage, ElMessageBox, FormInstance, FormRules } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import type { FormInstance, FormRules } from 'element-plus';
 import request from '@/utils/request';
 import type { AxiosRequestConfig } from 'axios';
 
@@ -230,8 +231,8 @@ const loadData = async (page = 1) => {
         pageSize: pageSize.value,
       },
     } as AxiosRequestConfig);
-    tableData.value = res.data?.records || res.data || [];
-    total.value = (res.data as Record<string, number>)?.total || tableData.value.length;
+    tableData.value = res?.records || res || [];
+    total.value = (res as unknown as { total: number })?.total || tableData.value.length;
 
     // 统计各分类数量
     if (page === 1 && !filterCategory.value && !filterKeyword.value) {
