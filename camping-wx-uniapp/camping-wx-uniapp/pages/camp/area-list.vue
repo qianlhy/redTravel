@@ -33,7 +33,7 @@
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 // 后端接口地址
-const baseUrl = 'http://kko.wfeezor.cn/api';
+const baseUrl = 'https://kko.wfeezor.cn/api';
 const mainAreaList = ref([]);
 
 // 主区域列表（A/B/C区，从数据库camp_area表获取）

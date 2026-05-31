@@ -106,12 +106,6 @@
         "selectedIconPath": "static/tab-home-active.png",
         "text": "首页"
       }
-      <!-- {
-        "pagePath": "pages/booking/order",
-        "iconPath": "static/tab-order.png",
-        "selectedIconPath": "static/tab-order-active.png",
-        "text": "我的预约"
-      } -->
     ]
   },
   "condition": {

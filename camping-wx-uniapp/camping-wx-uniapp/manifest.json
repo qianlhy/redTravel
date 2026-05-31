@@ -142,14 +142,14 @@
         "template" : "template.h5.html",
         "router" : {
             "mode" : "history",
-            "base" : ""
+            "base" : "/h5/"
         },
         "devServer" : {
             "https" : false,
             "port" : 5173,
             "proxy" : {
                 "/api" : {
-                    "target" : "http://kko.wfeezor.cn",
+                    "target" : "https://kko.wfeezor.cn",
                     "changeOrigin" : true,
                     "secure" : false
                 }

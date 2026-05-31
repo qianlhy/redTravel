@@ -29,6 +29,15 @@ public class XAdminIdAuthFilter extends OncePerRequestFilter {
     @Autowired
     private AdminUserDetailsService adminUserDetailsService;
 
+    /**
+     * 放行公开接口（H5端不需要认证）
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        return path.startsWith("/api/h5/");  // H5公开接口直接放行
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

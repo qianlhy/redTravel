@@ -100,9 +100,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onShow } from 'vue';
+import { ref, onMounted } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
 import { h5Api } from '@/utils/api.js';
-
 const statusBarHeight = ref(20);
 const currentStatus = ref('all');
 const orderList = ref([]);

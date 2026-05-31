@@ -7,7 +7,7 @@
  *   /api/admin/* — 管理员接口
  */
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://kko.wfeezor.cn';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://kko.wfeezor.cn';
 
 function request(url, options = {}) {
   return new Promise((resolve, reject) => {

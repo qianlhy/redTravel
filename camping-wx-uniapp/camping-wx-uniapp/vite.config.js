@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite';
 import uni from '@dcloudio/vite-plugin-uni';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [uni()],
@@ -8,7 +8,7 @@ export default defineConfig({
     proxy: {
       // 将 /api 开头的请求代理到后端服务器
       '/api': {
-        target: 'http://kko.wfeezor.cn',
+        target: 'https://kko.wfeezor.cn',
         changeOrigin: true,
       },
     },

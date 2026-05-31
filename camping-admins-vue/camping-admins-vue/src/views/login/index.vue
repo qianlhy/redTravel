@@ -64,7 +64,7 @@ const handleLogin = async () => {
     router.push('/dashboard');
   } catch (err: unknown) {
     const error = err as { response?: { status?: number }; message?: string } | Error;
-    if (error?.response?.status === 401) {
+    if ('response' in error && error.response?.status === 401) {
       ElMessage.error('登录过期，请重新登录');
     } else {
       ElMessage.error((error as Error)?.message || '登录失败，请检查账号密码');
